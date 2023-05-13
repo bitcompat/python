@@ -98,8 +98,6 @@ jobs:
           tags: |
             ${{ matrix.python_version.latest && 'latest' || '' }}
             ${{ steps.version-tags.outputs.result }}
-            type=sha
-            type=sha,format=long
 
       - name: Build and Push container images
         uses: docker/build-push-action@v4
