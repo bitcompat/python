@@ -6,6 +6,8 @@ FROM bitnami/minideb:bullseye as python_build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG PYTHON_VERSION
+ARG TARGETARCH
+ARG BUILDARCH
 
 COPY --link prebuildfs/ /
 RUN mkdir -p /opt/blacksmith-sandbox
@@ -15,10 +17,15 @@ WORKDIR /bitnami/blacksmith-sandbox
 
 ADD --link https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz python.tar.xz
 RUN <<EOT bash
-    set -e
+    set -ex
     tar -Jxf python.tar.xz
     cd Python-${PYTHON_VERSION}
-    ./configure --enable-optimizations --with-lto --enable-shared --without-static-libpython --prefix=/opt/bitnami/python
+    OPTIM_FLAG="--enable-optimizations"
+    if [ "$TARGETARCH" != "$BUILDARCH" ]; then
+        OPTIM_FLAG=""
+    fi
+
+    ./configure --with-lto $OPTIM_FLAG --enable-shared --without-static-libpython --prefix=/opt/bitnami/python
 EOT
 
 RUN cd Python-${PYTHON_VERSION} && make -j$(nproc)
