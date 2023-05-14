@@ -30,6 +30,8 @@ EOT
 
 RUN cd Python-${PYTHON_VERSION} && make -j$(nproc)
 RUN cd Python-${PYTHON_VERSION} && make install
+RUN find /opt/bitnami/python/lib/ -name libpython*.a -delete -print
+RUN find /opt/bitnami/python/lib/ -name python.o -delete -print
 
 ENV PATH=/opt/bitnami/python/bin:$PATH
 ENV LD_LIBRARY_PATH=/opt/bitnami/python/lib/
