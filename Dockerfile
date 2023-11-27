@@ -1,8 +1,8 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.6
 
 ARG PYTHON_VERSION
 
-FROM bitnami/minideb:bullseye as python_build
+FROM bitnami/minideb:bookworm as python_build
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG PYTHON_VERSION
@@ -49,7 +49,7 @@ RUN <<EOT bash
     done
 EOT
 
-FROM bitnami/minideb:bullseye as stage-0
+FROM bitnami/minideb:bookworm as stage-0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DIRS_TO_TRIM="/usr/share/man \
