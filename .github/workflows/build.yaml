@@ -13,8 +13,11 @@ jobs:
     strategy:
       matrix:
         python_version:
-          - version: 3.11.6 # renovate: datasource=github-tags depName=python/cpython extractVersion=^v(?<version>\d+\.\d+.\d+)$
+          - version: 3.12.1 # renovate: datasource=github-tags depName=python/cpython extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: true
+            revision: 1
+          - version: 3.11.7 # renovate: datasource=github-tags depName=python/cpython extractVersion=^v(?<version>\d+\.\d+.\d+)$
+            latest: false
             revision: 1
           - version: 3.10.13 # renovate: datasource=github-tags depName=python/cpython extractVersion=^v(?<version>\d+\.\d+.\d+)$
             latest: false
