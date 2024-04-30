@@ -1,10 +1,10 @@
-# syntax=docker/dockerfile:1.6
+# syntax=docker/dockerfile:1.7
 
 ARG PYTHON_VERSION
 
 FROM bitnami/minideb:bookworm as python_build
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+SHELL [ "/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c" ]
 ARG PYTHON_VERSION
 ARG TARGETARCH
 ARG BUILDARCH
@@ -51,7 +51,7 @@ EOT
 
 FROM bitnami/minideb:bookworm as stage-0
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+SHELL [ "/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c" ]
 ARG DIRS_TO_TRIM="/usr/share/man \
     /var/cache/apt \
     /var/log \
@@ -86,11 +86,11 @@ ARG PYTHON_VERSION
 ARG TARGETARCH
 ENV APP_VERSION=$PYTHON_VERSION \
     BITNAMI_APP_NAME=python \
-    BITNAMI_IMAGE_VERSION="${PYTHON_VERSION}-prod-debian-11" \
+    BITNAMI_IMAGE_VERSION="${PYTHON_VERSION}-prod-debian-12" \
     PATH="/opt/bitnami/python/bin:$PATH" \
     LD_LIBRARY_PATH=/opt/bitnami/python/lib/ \
     OS_ARCH=$TARGETARCH \
-    OS_FLAVOUR="debian-11" \
+    OS_FLAVOUR="debian-12" \
     OS_NAME="linux"
 
 EXPOSE 8000
