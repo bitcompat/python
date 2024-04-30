@@ -8,6 +8,7 @@ SHELL [ "/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c" ]
 ARG PYTHON_VERSION
 ARG TARGETARCH
 ARG BUILDARCH
+ARG OPTIM_FLAG="--enable-optimizations"
 
 COPY --link prebuildfs/ /
 RUN mkdir -p /opt/blacksmith-sandbox
@@ -17,15 +18,14 @@ WORKDIR /bitnami/blacksmith-sandbox
 
 ADD --link https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz python.tar.xz
 RUN <<EOT bash
-    set -ex
     tar -Jxf python.tar.xz
     cd Python-${PYTHON_VERSION}
-    OPTIM_FLAG="--enable-optimizations"
+
     if [ "$TARGETARCH" != "$BUILDARCH" ]; then
         OPTIM_FLAG=""
     fi
 
-    ./configure --with-lto $OPTIM_FLAG --enable-shared --without-static-libpython --prefix=/opt/bitnami/python
+    ./configure --with-lto ${OPTIM_FLAG} --enable-shared --without-static-libpython --prefix=/opt/bitnami/python
 EOT
 
 RUN cd Python-${PYTHON_VERSION} && make -j$(nproc)
