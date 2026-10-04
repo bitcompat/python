@@ -2,7 +2,7 @@
 
 ARG PYTHON_VERSION
 
-FROM bitnami/minideb:bookworm as python_build
+FROM bitnami/minideb:trixie as python_build
 
 SHELL [ "/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c" ]
 ARG PYTHON_VERSION
@@ -12,7 +12,7 @@ ARG OPTIM_FLAG="--enable-optimizations"
 
 COPY --link prebuildfs/ /
 RUN mkdir -p /opt/blacksmith-sandbox
-RUN install_packages ca-certificates curl git wget build-essential libreadline-dev libncursesw5-dev libsqlite3-dev libssl-dev libc6-dev libbz2-dev libffi-dev liblzma-dev zlib1g-dev xz-utils
+RUN install_packages ca-certificates curl git wget build-essential libreadline-dev libncurses-dev libsqlite3-dev libssl-dev libc6-dev libbz2-dev libffi-dev liblzma-dev zlib1g-dev xz-utils
 
 WORKDIR /bitnami/blacksmith-sandbox
 
@@ -49,7 +49,7 @@ RUN <<EOT bash
     done
 EOT
 
-FROM bitnami/minideb:bookworm as stage-0
+FROM bitnami/minideb:trixie as stage-0
 
 SHELL [ "/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c" ]
 ARG DIRS_TO_TRIM="/usr/share/man \
@@ -63,7 +63,7 @@ COPY --from=python_build /opt/bitnami /opt/bitnami
 
 RUN <<EOT bash
     set -e
-    install_packages build-essential bzip2 ca-certificates curl git libreadline8 libsqlite3-dev libssl-dev make pkg-config procps readline-common unzip wget xz-utils
+    install_packages build-essential bzip2 ca-certificates curl git libreadline8t64 libsqlite3-dev libssl-dev make pkg-config procps readline-common unzip wget xz-utils
     ln -sv python3 /opt/bitnami/python/bin/python
     ln -sv pip3 /opt/bitnami/python/bin/pip
 
@@ -86,11 +86,11 @@ ARG PYTHON_VERSION
 ARG TARGETARCH
 ENV APP_VERSION=$PYTHON_VERSION \
     BITNAMI_APP_NAME=python \
-    BITNAMI_IMAGE_VERSION="${PYTHON_VERSION}-prod-debian-12" \
+    BITNAMI_IMAGE_VERSION="${PYTHON_VERSION}-prod-debian-13" \
     PATH="/opt/bitnami/python/bin:$PATH" \
     LD_LIBRARY_PATH=/opt/bitnami/python/lib/ \
     OS_ARCH=$TARGETARCH \
-    OS_FLAVOUR="debian-12" \
+    OS_FLAVOUR="debian-13" \
     OS_NAME="linux"
 
 EXPOSE 8000
